@@ -1,6 +1,6 @@
 'use client';
 import type { Note } from '@prisma/client';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, Dispatch, SetStateAction } from 'react';
 import NotesContext from './context/NotesContext';
 import MaterialIcon, {colorPalette} from 'material-icons-react';
 
@@ -35,7 +35,10 @@ function Notes({ initialNotes }: Props) {
 
 export default Notes;
 
-function NoteCard({note, setUpdatedNotes}) {
+function NoteCard({note, setUpdatedNotes}: {
+  note: Note,
+  setUpdatedNotes: Dispatch<SetStateAction<boolean>>
+}) {
   const [moreOpen, setMoreOpen] = useState(false);
 
   async function deleteNote() {
