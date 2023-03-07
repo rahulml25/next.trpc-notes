@@ -17,3 +17,15 @@ export async function POST(request: NextRequest) {
     status: 200,
   });
 }
+
+export async function DELETE(request: NextRequest) {
+  const body = await request.json();
+
+  const note = await prisma.note.delete({
+    where: { id: body.id }
+  });
+
+  return NextResponse.json(note, {
+    status: 200,
+  });
+}
