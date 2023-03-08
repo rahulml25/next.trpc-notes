@@ -1,8 +1,10 @@
 'use client';
+
 import type { Note } from '@prisma/client';
 import React, { useEffect, useState, useContext, Dispatch, SetStateAction } from 'react';
 import NotesContext from './context/NotesContext';
-import MaterialIcon, {colorPalette} from 'material-icons-react';
+import { IoIosMore } from 'react-icons/io';
+import { MdDelete } from 'react-icons/md';
 
 type Props = {
   initialNotes: Note[];
@@ -27,7 +29,7 @@ function Notes({ initialNotes }: Props) {
   return (
     <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-2">
       {notes.map((note, idx) =>
-        <NoteCard key={idx} {...{note,setUpdatedNotes}}/>
+        <NoteCard key={idx} {...note}/>
       )}
     </div>
   );
@@ -35,11 +37,9 @@ function Notes({ initialNotes }: Props) {
 
 export default Notes;
 
-function NoteCard({note, setUpdatedNotes}: {
-  note: Note,
-  setUpdatedNotes: Dispatch<SetStateAction<boolean>>
-}) {
+function NoteCard(note: Note) {
   const [moreOpen, setMoreOpen] = useState(false);
+  const { setUpdatedNotes } = useContext(NotesContext);
 
   async function deleteNote() {
     const res = await fetch('/api/note', {
@@ -58,14 +58,12 @@ function NoteCard({note, setUpdatedNotes}: {
     <div className="flex justify-between">
       <h1 className="text-2xl font-bold">{note.title}</h1>
       <div className="relative">
-        <div onClick={() => setMoreOpen(s => !s)}>
-          <MaterialIcon icon="more_horiz" color="#bbb"/>
-        </div>
+        <IoIosMore onClick={() => setMoreOpen(s => !s)}/>
 
         {moreOpen && <div className="absolute z-[1] bg-neutral-800 top-4 right-0 p-1 pr-1.5 rounded-lg
           after:absolute after:h-2 after:w-2 after:bg-neutral-800 after:-top-1 after:right-2 after:z-[-10] after:rounded-[2px] after:rotate-45">
           <button className="flex space-x-2 items-center" onClick={deleteNote}>
-            <MaterialIcon icon="delete" color="#bbb"/>
+            <MdDelete className="text-blue-600"/>
             <span>delete</span>
           </button>
         </div>}
